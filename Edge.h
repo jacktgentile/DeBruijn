@@ -8,8 +8,8 @@ using std::string;
 class Edge {
 
   public:
-    Edge(const string & source, const string & dest, unsigned int weight) :
-      source_(source), dest_(dest), weight_(weight) { }
+    Edge(const string & source, const string & dest) :
+      source_(source), dest_(dest) { }
     ~Edge() { }
 
     /**
@@ -22,11 +22,6 @@ class Edge {
      */
     const string & dest() const { return dest_; }
 
-    /**
-     * Returns the weight of the Edge.
-     */
-    unsigned int weight() const { return weight_; }
-
     bool operator==(const Edge & other) const {
       return this == &other;
     }
@@ -34,5 +29,4 @@ class Edge {
   private:
     const string & source_;
     const string & dest_;
-    unsigned int weight_;
 };

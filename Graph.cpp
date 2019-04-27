@@ -43,29 +43,20 @@ unsigned int Graph::degree_out(const string & v) const {
 /* Inserts the vertex v to the graph (if v isn't already present),
    with no incoming or outgoing edges. */
 void Graph::insertVertex(const string & v) {
-  vertexSet.insert(v);
-  incomingEdges[v] = std::list<Edge>();
-  outgoingEdges[v] = std::list<Edge>();
+  std::pair<std::set<string>::iterator, bool> p = vertexSet.insert(v);
+  if (p.second) {
+    incomingEdges[v] = std::list<Edge>();
+    outgoingEdges[v] = std::list<Edge>();
+  }
 }
 
 /* Inserts the edge e. */
-void Graph::insertEdge(const string& source, const string& dest, unsigned int weight) {
-  Edge* temp = new Edge(source, dest, weight);
-  insertEdge(*temp);
-}
-
-/* Inserts the edge e. */
-void Graph::insertEdge(const Edge & e) {
-  const string & source = e.source();
-  const string & dest = e.dest();
+void Graph::insertEdge(const string& source, const string& dest) {
+  // unsigned int weight = best_overlap(source, dest);
+  Edge e(source, dest);
   edgeList.push_back(e);
   incomingEdges[dest].push_back(e);
   outgoingEdges[source].push_back(e);
-}
-
-/* Remove edge with given source and destination */
-void Graph::removeEdge(const string& source, const string& dest) {
-
 }
 
 /* Remove the given edge. */
@@ -104,4 +95,24 @@ bool Graph::edgeExists(const string& source, const string& dest) const {
     }
     return false;
   }
+}
+
+
+string Graph::getSink() const {
+  for (string v : vertexSet) {
+    if (degree_in(v) > degree_out(v)) {
+      return v;
+    }
+  }
+  return "";
+}
+
+
+string Graph::getSource() const {
+  for (string v : vertexSet) {
+    if (degree_in(v) < degree_out(v)) {
+      return v;
+    }
+  }
+  return "";
 }

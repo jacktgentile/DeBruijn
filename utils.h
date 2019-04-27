@@ -1,6 +1,11 @@
 #include <string>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+#include <vector>
 
 using std::string;
+using std::vector;
 
 unsigned int best_overlap(const string & source, const string & dest) {
   unsigned int common_len = source.size() < dest.size() ? source.size() : dest.size();
@@ -18,4 +23,25 @@ unsigned int best_overlap(const string & source, const string & dest) {
     }
   }
   return 0;
+}
+
+string generate_bp_sequence(unsigned int L) {
+  char alphabet[4];
+  alphabet[0] = 'A';
+  alphabet[1] = 'G';
+  alphabet[2] = 'T';
+  alphabet[3] = 'C';
+  string sequence = "";
+  for (int i = 0; i < L; i++) {
+    (sequence) += alphabet[rand() % 4];
+  }
+  return sequence;
+}
+
+vector<string> generate_k_mers(const string & sequence, unsigned int k) {
+  vector<string> kmers = vector<string>();
+  for (int i = 0; i <= sequence.size() - k; i++) {
+    kmers.push_back(sequence.substr(i, k));
+  }
+  return kmers;
 }

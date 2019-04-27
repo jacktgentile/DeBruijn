@@ -25,10 +25,8 @@ class Graph {
     void insertVertex(const string & key);
 
     // Edge modification:
-    void insertEdge(const string& source, const string& dest, unsigned int weight);
-    void insertEdge(const Edge & e);
+    void insertEdge(const string& source, const string& dest);
 
-    void removeEdge(const string& source, const string& dest);
     void removeEdge(const Edge & e);
 
     // Graph structure:
@@ -37,7 +35,9 @@ class Graph {
 
     bool edgeExists(const string& source, const string& dest) const;
 
-  private:
+    string getSource() const;
+    string getSink() const;
+
     std::list<Edge> edgeList;
     std::set<string> vertexSet;
     std::unordered_map<string, std::list<Edge>> incomingEdges;
