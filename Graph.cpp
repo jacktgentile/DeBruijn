@@ -1,16 +1,12 @@
 #include "Graph.h"
-#include "Edge.h"
-
-#include <string>
-#include <list>
 
 using std::string;
 
 Graph::Graph() {
-   edgeList = std::list<Edge>();
+   edgeList = std::list<edge_t>();
    vertexSet = std::set<string>();
-   incomingEdges = std::unordered_map<string, std::list<Edge>>();
-   outgoingEdges = std::unordered_map<string, std::list<Edge>>();
+   incomingEdges = std::unordered_map<string, std::list<edge_t>>();
+   outgoingEdges = std::unordered_map<string, std::list<edge_t>>();
 }
 
 Graph::~Graph() {
@@ -45,56 +41,53 @@ unsigned int Graph::degree_out(const string & v) const {
 void Graph::insertVertex(const string & v) {
   std::pair<std::set<string>::iterator, bool> p = vertexSet.insert(v);
   if (p.second) {
-    incomingEdges[v] = std::list<Edge>();
-    outgoingEdges[v] = std::list<Edge>();
+    incomingEdges[v] = std::list<edge_t>();
+    outgoingEdges[v] = std::list<edge_t>();
   }
 }
 
 /* Inserts the edge e. */
-void Graph::insertEdge(const string& source, const string& dest) {
-  // unsigned int weight = best_overlap(source, dest);
-  Edge e(source, dest);
+void Graph::insertEdge(edge_t e) {
   edgeList.push_back(e);
-  incomingEdges[dest].push_back(e);
-  outgoingEdges[source].push_back(e);
+  incomingEdges[e.second].push_back(e);
+  outgoingEdges[e.first].push_back(e);
 }
 
 /* Remove the given edge. */
-void Graph::removeEdge(const Edge & e) {
+void Graph::removeEdge(edge_t e) {
   edgeList.remove(e);
-  incomingEdges[e.dest()].remove(e);
-  outgoingEdges[e.source()].remove(e);
+  incomingEdges[e.second].remove(e);
+  outgoingEdges[e.first].remove(e);
 }
 
-/*  */
-const std::list<Edge>& Graph::getIncomingEdges(const string & v) const {
+
+std::list<edge_t> Graph::getIncomingEdges(const string & v) const {
   return incomingEdges.at(v);
 }
 
-/*  */
-const std::list<Edge>& Graph::getOutgoingEdges(const string & v) const {
+
+std::list<edge_t> Graph::getOutgoingEdges(const string & v) const {
   return outgoingEdges.at(v);
 }
 
-/*  */
+
 bool Graph::edgeExists(const string& source, const string& dest) const {
-  const std::list<Edge>& outList = outgoingEdges.at(source);
-  const std::list<Edge>& inList = incomingEdges.at(dest);
+  const std::list<edge_t>& outList = outgoingEdges.at(source);
+  const std::list<edge_t>& inList = incomingEdges.at(dest);
   if (outList.size() < inList.size()) {
-    for (Edge e : outList) {
-      if (e.dest() == dest) {
+    for (edge_t e : outList) {
+      if (e.second == dest) {
         return true;
       }
     }
-    return false;
   } else {
-    for (Edge e : inList) {
-      if (e.source() == source) {
+    for (edge_t e : inList) {
+      if (e.first == source) {
         return true;
       }
     }
-    return false;
   }
+  return false;
 }
 
 
@@ -115,4 +108,21 @@ string Graph::getSource() const {
     }
   }
   return "";
+}
+
+
+string Graph::toString() const {
+  string result;
+  for (string v : vertexSet) {
+    result.append(v);
+    result.append(":\n");
+    for (edge_t e : outgoingEdges.at(v)) {
+      result.append(e.first);
+      result.append(" to ");
+      result.append(e.second);
+      result.append("\n");
+    }
+  }
+  result.pop_back();
+  return result;
 }

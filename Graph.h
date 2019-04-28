@@ -1,14 +1,15 @@
 #pragma once
 
 #include <list>
+#include <utility>
 #include <string>
 #include <unordered_map>
 #include <set>
 #include <iostream>
 
-#include "Edge.h"
-
 using std::string;
+
+typedef std::pair<string, string> edge_t;
 
 class Graph {
 
@@ -25,21 +26,23 @@ class Graph {
     void insertVertex(const string & key);
 
     // Edge modification:
-    void insertEdge(const string& source, const string& dest);
+    void insertEdge(edge_t e);
 
-    void removeEdge(const Edge & e);
+    void removeEdge(edge_t e);
 
     // Graph structure:
-    const std::list<Edge>& getIncomingEdges(const string & v) const;
-    const std::list<Edge>& getOutgoingEdges(const string & v) const;
+    std::list<edge_t> getIncomingEdges(const string & v) const;
+    std::list<edge_t> getOutgoingEdges(const string & v) const;
 
     bool edgeExists(const string& source, const string& dest) const;
 
     string getSource() const;
     string getSink() const;
 
-    std::list<Edge> edgeList;
+    string toString() const;
+
+    std::list<edge_t> edgeList;
     std::set<string> vertexSet;
-    std::unordered_map<string, std::list<Edge>> incomingEdges;
-    std::unordered_map<string, std::list<Edge>> outgoingEdges;
+    std::unordered_map<string, std::list<edge_t>> incomingEdges;
+    std::unordered_map<string, std::list<edge_t>> outgoingEdges;
 };
