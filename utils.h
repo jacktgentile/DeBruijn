@@ -29,8 +29,8 @@ string generate_bp_sequence(unsigned int L) {
   char alphabet[4];
   alphabet[0] = 'A';
   alphabet[1] = 'G';
-  alphabet[2] = 'T';
-  alphabet[3] = 'C';
+  alphabet[2] = 'G';
+  alphabet[3] = 'A';
   string sequence = "";
   for (int i = 0; i < L; i++) {
     (sequence) += alphabet[rand() % 4];

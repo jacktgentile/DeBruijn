@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include <queue>
 
 using std::string;
 
@@ -113,16 +114,30 @@ string Graph::getSource() const {
 
 string Graph::toString() const {
   string result;
+  std::queue<string> frontier;
+  std::unordered_map<string, bool> visited;
   for (string v : vertexSet) {
-    result.append(v);
-    result.append(":\n");
-    for (edge_t e : outgoingEdges.at(v)) {
-      result.append(e.first);
-      result.append(" to ");
-      result.append(e.second);
+    visited[v] = false;
+  }
+  string v = getSource();
+  if (v == "") {
+    v = *vertexSet.begin();
+  }
+  frontier.push(v);
+  while (!frontier.empty()) {
+    v = frontier.front();
+    frontier.pop();
+    if (!visited[v]) {
+      visited[v] = true;
+      result.append(v);
       result.append("\n");
+      for (edge_t e : outgoingEdges.at(v)) {
+        result.append("-->");
+        result.append(e.second);
+        result.append("\n");
+        frontier.push(e.second);
+      }
     }
   }
-  result.pop_back();
   return result;
 }
