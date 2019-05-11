@@ -1,15 +1,19 @@
 #pragma once
 
+
 #include <list>
 #include <utility>
 #include <string>
 #include <unordered_map>
 #include <set>
+#include <vector>
 #include <iostream>
 
 using std::string;
 
 typedef std::pair<string, string> edge_t;
+
+
 
 class Graph {
 
@@ -38,6 +42,10 @@ class Graph {
 
     string getSource() const;
     string getSink() const;
+
+    string reconstructSequence();
+    bool reconstructHelper(std::vector<string>& path, std::list<edge_t>& remaining, string& source, string& sink);
+    bool list_contains(std::list<edge_t>& edgeList, edge_t target);
 
     string toString() const;
 

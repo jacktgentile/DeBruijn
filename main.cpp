@@ -11,7 +11,8 @@ int main() {
   const int K = 3;
   srand(time(NULL));
 
-  string sequence = generate_bp_sequence(5);
+  // string sequence = generate_bp_sequence(5);
+  string sequence = "bcdeabfgabc";
   std::cout << sequence << std::endl;
   vector<string> kmers = generate_k_mers(sequence, K);
   std::random_shuffle(kmers.begin(), kmers.end());
@@ -27,6 +28,6 @@ int main() {
     g.insertEdge(e);
   }
 
-  std::cout << g.toString() << std::endl;
+  std::cout << g.reconstructSequence() << std::endl;
   return 0;
 }

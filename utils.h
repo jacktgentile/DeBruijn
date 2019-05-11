@@ -2,10 +2,14 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <list>
 #include <vector>
 
 using std::string;
 using std::vector;
+using std::list;
+
+typedef std::pair<string, string> edge_t;
 
 unsigned int best_overlap(const string & source, const string & dest) {
   unsigned int common_len = source.size() < dest.size() ? source.size() : dest.size();

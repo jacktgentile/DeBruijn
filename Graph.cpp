@@ -72,6 +72,16 @@ std::list<edge_t> Graph::getOutgoingEdges(const string & v) const {
 }
 
 
+bool Graph::list_contains(std::list<edge_t>& edgeList, edge_t target){
+  for (edge_t e : edgeList) {
+    if (e == target) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
 bool Graph::edgeExists(const string& source, const string& dest) const {
   const std::list<edge_t>& outList = outgoingEdges.at(source);
   const std::list<edge_t>& inList = incomingEdges.at(dest);
@@ -98,7 +108,7 @@ string Graph::getSink() const {
       return v;
     }
   }
-  return "";
+  return *vertexSet.begin();
 }
 
 
@@ -108,7 +118,46 @@ string Graph::getSource() const {
       return v;
     }
   }
-  return "";
+  return *vertexSet.begin();
+}
+
+
+string Graph::reconstructSequence() {
+    std::list<edge_t> edgeListCopy = std::list<edge_t>();
+    for (edge_t e : edgeList) {
+      edgeListCopy.push_back(e);
+    }
+    std::vector<string> path = std::vector<string>();
+    string source = getSource();
+    string sink = getSink();
+    path.push_back(source);
+    reconstructHelper(path, edgeListCopy, source, sink);
+    string result = "";
+    for (string v : path) {
+      result.append(v);
+      result.append(" ");
+    }
+    return result;
+}
+
+
+bool Graph::reconstructHelper(std::vector<string>& path, std::list<edge_t>& remaining, string& source, string& sink) {
+    if (path.size() == edgeList.size() + 1 && path[0] == source && path[path.size()-1] == sink) {
+      return true;
+    }
+    string cur_vertex = path[path.size()-1];
+    for (edge_t e : outgoingEdges[cur_vertex]) {
+      if (list_contains(remaining, e)) {
+        path.push_back(e.second);
+        remaining.remove(e);
+        if (reconstructHelper(path, remaining, source, sink)) {
+          return true;
+        }
+        path.pop_back();
+        remaining.push_back(e);
+      }
+    }
+    return false;
 }
 
 
@@ -120,9 +169,6 @@ string Graph::toString() const {
     visited[v] = false;
   }
   string v = getSource();
-  if (v == "") {
-    v = *vertexSet.begin();
-  }
   frontier.push(v);
   while (!frontier.empty()) {
     v = frontier.front();
