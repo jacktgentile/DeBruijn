@@ -12,7 +12,7 @@ int main() {
   srand(time(NULL));
 
   // string sequence = generate_bp_sequence(5);
-  string sequence = "bcdeabfgabc";
+  string sequence = "aaaabbba";
   std::cout << sequence << std::endl;
   vector<string> kmers = generate_k_mers(sequence, K);
   std::random_shuffle(kmers.begin(), kmers.end());

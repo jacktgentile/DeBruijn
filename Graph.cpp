@@ -72,9 +72,10 @@ std::list<edge_t> Graph::getOutgoingEdges(const string & v) const {
 }
 
 
-bool Graph::list_contains(std::list<edge_t>& edgeList, edge_t target){
-  for (edge_t e : edgeList) {
-    if (e == target) {
+bool Graph::remove_if_contains(std::list<edge_t>& paramList, edge_t target){
+  for (std::list<edge_t>::iterator it = paramList.begin(); it != paramList.end(); it++) {
+    if (*it == target) {
+      paramList.erase(it);
       return true;
     }
   }
@@ -132,10 +133,10 @@ string Graph::reconstructSequence() {
     string sink = getSink();
     path.push_back(source);
     reconstructHelper(path, edgeListCopy, source, sink);
-    string result = "";
+    unsigned k_minus_one = source.size();
+    string result = path[0].substr(0,k_minus_one-1);
     for (string v : path) {
-      result.append(v);
-      result.append(" ");
+      result += v[k_minus_one-1];
     }
     return result;
 }
@@ -147,9 +148,8 @@ bool Graph::reconstructHelper(std::vector<string>& path, std::list<edge_t>& rema
     }
     string cur_vertex = path[path.size()-1];
     for (edge_t e : outgoingEdges[cur_vertex]) {
-      if (list_contains(remaining, e)) {
+      if (remove_if_contains(remaining, e)) {
         path.push_back(e.second);
-        remaining.remove(e);
         if (reconstructHelper(path, remaining, source, sink)) {
           return true;
         }
