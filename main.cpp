@@ -1,33 +1,32 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
-#include "utils.h"
 #include "Graph.h"
 
-using std::string;
+using std::cout;
+using std::cin;
 
 
 int main() {
-  const int K = 3;
-  srand(time(NULL));
 
-  // string sequence = generate_bp_sequence(5);
-  string sequence = "aaaabbba";
-  std::cout << sequence << std::endl;
-  vector<string> kmers = generate_k_mers(sequence, K);
+  srand(time(NULL));
+  cout << "\nType the original sequence, then press \'Enter\':    ";
+  string sequence;
+  cin >> sequence;
+  cout << "Give a K value greater than 2, then press \'Enter\': ";
+  unsigned int K;
+  cin >> K;
+
+  vector<string> kmers = vector<string>();
+  for (int i = 0; i <= sequence.size() - K; i++) {
+    kmers.push_back(sequence.substr(i, K));
+  }
   std::random_shuffle(kmers.begin(), kmers.end());
 
-  // Build DeBruijn graph g
-  Graph g = Graph();
-  for (string str : kmers) {
-    string source = str.substr(0,K-1);
-    string dest = str.substr(1);
-    g.insertVertex(source);
-    g.insertVertex(dest);
-    edge_t e(source, dest);
-    g.insertEdge(e);
-  }
+  Graph g = Graph(kmers);
+  cout << "\nOriginal sequence:\n" << sequence;
+  cout << "\nReconstructed sequence:\n" << g.reconstructSequence() << "\n\n";
 
-  std::cout << g.reconstructSequence() << std::endl;
   return 0;
 }
